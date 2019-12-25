@@ -5,6 +5,23 @@ import router from './router'
 import store from './store'
 import axios from 'axios'
 import ActionCableVue from 'actioncable-vue'
+import BootstrapVue from 'bootstrap-vue'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+import { library } from '@fortawesome/fontawesome-svg-core'
+// import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
+import {
+  faFacebook,
+  faTwitter,
+  faGoogle
+} from '@fortawesome/free-brands-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+library.add(faFacebook)
+library.add(faTwitter)
+library.add(faGoogle)
+// library.add(faUserSecret)
+Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 Vue.config.productionTip = false
 
@@ -24,6 +41,7 @@ Vue.use(ActionCableVue, {
   connectionUrl: process.env.VUE_APP_API_SOCKET_URL,
   connectImmediately: true
 })
+Vue.use(BootstrapVue)
 
 new Vue({
   router,
