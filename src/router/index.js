@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import store from '@/store'
+import { verifyUserExists } from '@/helpers/auth'
 import Home from '../views/Home.vue'
 
 Vue.use(VueRouter)
@@ -25,6 +27,11 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+router.beforeEach(async (to, from, next) => {
+  await verifyUserExists(store.commit)
+  next()
 })
 
 export default router
