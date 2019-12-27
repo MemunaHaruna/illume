@@ -1,17 +1,18 @@
 <template>
   <div class="home">
-    <HelloWorld msg="Welcome to Illume" />
+    <!-- <TopicsList /> -->
+    <QuotesList />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import QuotesList from '@/components/QuotesList.vue'
 
 export default {
   name: 'home',
   components: {
-    HelloWorld
+    QuotesList
   }
 }
 </script>

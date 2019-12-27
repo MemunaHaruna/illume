@@ -1,7 +1,7 @@
 <template>
   <div class="illume-header">
     <b-navbar toggleable="lg" type="light" variant="light">
-      <b-navbar-brand href="/" class="illume-brand">illume </b-navbar-brand>
+      <b-navbar-brand href="/" class="illume-brand">illume</b-navbar-brand>
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
       <b-collapse id="nav-collapse" is-nav>
@@ -32,14 +32,14 @@
           </b-nav-item-dropdown>
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto" v-if="!currentUser">
-          <b-button v-b-modal.modal-1 class="my-2 my-sm-0 signin-button">
-            Sign in
-          </b-button>
+          <b-button v-b-modal.modal-1 class="my-2 my-sm-0 signin-button"
+            >Sign in</b-button
+          >
           <b-modal id="modal-1" title="Signin to illume">
             <div class="signin-modal">
               <p>
                 Sign in to get access to premium quotes, create your own quotes,
-                and bookmark your favourite quotes.
+                bookmark and share your favourite quotes.
               </p>
               <SocialAuth />
             </div>

@@ -29,8 +29,8 @@ const instance = axios.create({
   baseURL: process.env.VUE_APP_API_BASE_URL
 })
 
-// instance.defaults.headers.common['Authorization'] =
-//   'Bearer' + localStorage.getItem('IllumeToken')
+instance.defaults.headers.common['Authorization'] =
+  'Bearer ' + localStorage.getItem('IllumeJwtToken')
 
 Vue.prototype.axios = instance
 Vue.prototype.$http = instance
