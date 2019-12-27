@@ -2,27 +2,32 @@
   <b-container class="quotes-container">
     <!-- <b-row v-for="(row, index) in cardRows" :key="index"> -->
     <!-- <b-col v-for="(quote, index) in row" :key="index"> -->
-    <div class="card-columns">
-      <div v-for="quote in quotes" :key="quote.id">
-        <QuoteCard
-          :quote="quote"
-          :imageUrl="setImageUrl(quote)"
-          :title="setTitle(quote)"
-        />
+    <div v-if="quotes && quotes.length">
+      <div class="card-columns">
+        <div v-for="quote in quotes" :key="quote.id">
+          <QuoteCard
+            :quote="quote"
+            :imageUrl="setImageUrl(quote)"
+            :title="setTitle(quote)"
+          />
+        </div>
       </div>
+      <b-pagination
+        v-model="paginationData.current_page"
+        :total-rows="paginationData.total_records"
+        per-page="10"
+        first-text="First"
+        prev-text="Prev"
+        next-text="Next"
+        last-text="Last"
+        align="center"
+        class="quotes-pagination"
+        @input="fetchQuotes(paginationData.current_page)"
+      ></b-pagination>
     </div>
-    <b-pagination
-      v-model="paginationData.current_page"
-      :total-rows="paginationData.total_records"
-      per-page="10"
-      first-text="First"
-      prev-text="Prev"
-      next-text="Next"
-      last-text="Last"
-      align="center"
-      class="quotes-pagination"
-      @input="fetchQuotes(paginationData.current_page)"
-    ></b-pagination>
+    <div v-if="!(quotes && quotes.length)">
+      <p class="empty-state">No quotes found</p>
+    </div>
     <!-- </b-col> -->
     <!-- </b-row> -->
   </b-container>
@@ -39,14 +44,14 @@ export default {
     setImageUrl: function(quote) {
       let titles = ['nature', 'travel']
       let randomTitle = Math.floor(titles.length * Math.random())
-      return `https://source.unsplash.com/1600x900/?${quote.source_title ||
+      return `https://source.unsplash.com/500x300/?${quote.source_title ||
         randomTitle}`
     },
     setTitle: function(quote) {
       return quote.is_qotd ? 'QUOTE OF THE DAY' : ''
     },
     fetchQuotes: function(currentPage) {
-      this.$store.dispatch('fetchQuotes', currentPage)
+      this.$store.dispatch('fetchQuotes', { currentPage })
     }
   },
   computed: {
@@ -55,6 +60,9 @@ export default {
     },
     paginationData() {
       return this.$store.getters['paginationData']
+    },
+    selectedTopic() {
+      return this.$store.getters['selectedTopic']
     }
     // cardRows() {
     //   var rows = []
@@ -71,7 +79,10 @@ export default {
     // }
   },
   mounted() {
-    this.$store.dispatch('fetchQuotes', 1)
+    this.$store.dispatch('fetchQuotes', {
+      currentPage: 1,
+      tags: this.selectedTopic || ''
+    })
   }
 }
 </script>
@@ -96,5 +107,11 @@ export default {
 
 .page-link:hover {
   color: #e27a4d;
+}
+
+.empty-state {
+  text-transform: uppercase;
+  font-weight: 100;
+  color: #bcbebe;
 }
 </style>
