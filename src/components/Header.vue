@@ -7,14 +7,7 @@
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
           <b-nav-form>
-            <b-form-input
-              size="sm"
-              class="mr-sm-2 search-quotes"
-              placeholder="Title, Topic or Author"
-            ></b-form-input>
-            <b-button size="sm" class="my-2 my-sm-0" type="submit"
-              >Search</b-button
-            >
+            <Search />
           </b-nav-form>
         </b-navbar-nav>
 
@@ -52,6 +45,7 @@
 
 <script>
 import SocialAuth from '@/components/SocialAuth.vue'
+import Search from '@/components/Search.vue'
 
 export default {
   data() {
@@ -74,7 +68,8 @@ export default {
     }
   },
   components: {
-    SocialAuth
+    SocialAuth,
+    Search
   }
 }
 </script>
@@ -85,16 +80,6 @@ export default {
     border-right: 1px solid #dbded8;
     padding-right: 0.5em !important;
   }
-}
-
-@media (min-width: 576px) {
-  .search-quotes {
-    width: 20em !important;
-  }
-}
-
-input {
-  margin-right: 0 !important;
 }
 
 .signin-button {

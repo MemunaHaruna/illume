@@ -39,6 +39,7 @@ export default {
 }
 .card-title {
   color: #e27a4d;
+  font-size: 1.2em;
 }
 
 .card-link {
