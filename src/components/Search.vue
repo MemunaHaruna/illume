@@ -1,9 +1,14 @@
 <template>
-  <div>
+  <div class="search-form_wrapper">
+    <font-awesome-icon
+      :icon="{ prefix: 'fas', iconName: 'search' }"
+      :style="{ color: '#bcbebe' }"
+      class="search-icon"
+    />
     <b-form-input
       size="sm"
       class="mr-sm-2 search-quotes"
-      placeholder="Title, Content or Author"
+      placeholder="Title, Body or Author"
       v-model="query"
       @keyup="handleSearch"
     ></b-form-input>
@@ -44,5 +49,17 @@ export default {
 
 input {
   margin-right: 0 !important;
+  text-indent: 1.5em;
+}
+
+.search-form_wrapper {
+  position: relative;
+}
+
+.search-icon {
+  font-size: 0.9em;
+  position: absolute;
+  top: 0.6em;
+  left: 0.5em;
 }
 </style>

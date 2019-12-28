@@ -23,7 +23,8 @@ export default {
   },
   computed: {
     topics() {
-      return this.$store.getters['topics']
+      let topicsNumber = 25
+      return this.$store.getters['topics'].slice(0, topicsNumber)
     },
     selectedTopicId() {
       return this.$store.getters['selectedTopicId']

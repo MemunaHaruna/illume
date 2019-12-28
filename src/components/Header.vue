@@ -13,6 +13,18 @@
 
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto" v-if="currentUser">
+          <b-nav-item>
+            <b-button
+              block
+              v-b-modal.modal-2
+              class="my-2 my-sm-0 create-quote-button"
+              >Add a Quote</b-button
+            >
+            <b-modal id="modal-2" title="Add a Quote">
+              <CreateQuote />
+            </b-modal>
+          </b-nav-item>
+
           <b-nav-item-dropdown right>
             <!-- Using 'button-content' slot -->
             <template v-slot:button-content>
@@ -46,6 +58,7 @@
 <script>
 import SocialAuth from '@/components/SocialAuth.vue'
 import Search from '@/components/Search.vue'
+import CreateQuote from '@/components/CreateQuote.vue'
 
 export default {
   data() {
@@ -69,7 +82,8 @@ export default {
   },
   components: {
     SocialAuth,
-    Search
+    Search,
+    CreateQuote
   }
 }
 </script>
@@ -82,11 +96,13 @@ export default {
   }
 }
 
-.signin-button {
+.signin-button,
+.create-quote-button {
   background-color: #e27a4d !important;
   border-color: #e27a4d;
 }
-.signin-button:hover {
+.signin-button:hover,
+.create-quote-button:hover {
   background-color: #ffffff !important;
   color: #343332 !important;
 }

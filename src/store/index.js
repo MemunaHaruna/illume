@@ -14,7 +14,9 @@ export default new Vuex.Store({
     quotes: [],
     paginationData: {},
     topics: [],
-    selectedTopicId: ''
+    selectedTopicId: '',
+    newQuote: {},
+    createQuoteError: ''
   },
   mutations: {
     setCurrentUser(state, payload) {
@@ -36,6 +38,12 @@ export default new Vuex.Store({
     },
     setSelectedTopicId(state, selectedTopicId) {
       state.selectedTopicId = selectedTopicId
+    },
+    setNewQuote(state, payload) {
+      state.newQuote = payload.quote
+    },
+    createQuoteError(state, payload) {
+      state.createQuoteError = payload.error
     }
   },
   getters: {
@@ -53,6 +61,12 @@ export default new Vuex.Store({
     },
     selectedTopicId: state => {
       return state.selectedTopicId
+    },
+    newQuote: state => {
+      return state.newQuote
+    },
+    createQuoteError: state => {
+      return state.createQuoteError
     }
   },
   actions: {
@@ -72,12 +86,33 @@ export default new Vuex.Store({
     },
     fetchTopics({ commit }) {
       Vue.prototype.$http
-        .get('api/tags?per_page=' + 15)
+        .get('api/tags')
         .then(response => {
           commit('setTopics', response.data)
         })
         .catch(error => {
           console.log(error, 'error fetching topics')
+          handleErrors(error)
+        })
+    },
+    createNewQuote({ commit }, payload) {
+      if (payload.tag_ids.length > 0) {
+        let tempTags = []
+        payload.tag_ids.forEach(item => {
+          tempTags.push(item.id)
+        })
+        payload.tag_ids = tempTags
+      }
+      if (payload.access) {
+        payload.access = Number(payload.access)
+      }
+      Vue.prototype.$http
+        .post('api/quotes', payload)
+        .then(response => {
+          commit('setNewQuote', response.data)
+        })
+        .catch(error => {
+          commit('createQuoteError', error)
           handleErrors(error)
         })
     }
