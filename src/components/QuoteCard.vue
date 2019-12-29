@@ -8,6 +8,7 @@
     tag="article"
     style
     class="mb-2"
+    footer-tag="footer"
   >
     <b-card-text>
       <i>{{ quote.content }}</i>
@@ -18,15 +19,23 @@
       </p>
     </b-card-text>
     <b-card-text class="quote-author">{{ quote.author }}</b-card-text>
+    <template v-slot:footer>
+      <QuoteActions :quote="quote" :bookmark="bookmark" />
+    </template>
   </b-card>
 </template>
 
 <script>
+import QuoteActions from '@/components/QuoteActions'
 export default {
+  components: {
+    QuoteActions
+  },
   props: {
     quote: Object,
     imageUrl: String,
-    title: String
+    title: String,
+    bookmark: Object
   }
 }
 </script>
@@ -48,5 +57,10 @@ export default {
 
 .card-link:hover {
   color: #bcbebe;
+}
+
+.card-footer {
+  height: 47px;
+  background-color: #f8f9fa;
 }
 </style>

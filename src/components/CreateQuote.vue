@@ -130,7 +130,7 @@ export default {
   },
   methods: {
     onSubmit() {
-      this.$store.dispatch('createNewQuote', this.form)
+      this.$store.dispatch('createNewQuote', { formData: this.form, vm: this })
       this.form = {
         source_title: '',
         author: '',
