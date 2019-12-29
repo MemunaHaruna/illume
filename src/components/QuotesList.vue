@@ -15,16 +15,17 @@
       <b-pagination
         v-model="paginationData.current_page"
         :total-rows="paginationData.total_records"
-        per-page="10"
+        :per-page="15"
         first-text="First"
         prev-text="Prev"
         next-text="Next"
         last-text="Last"
         align="center"
         class="quotes-pagination"
-        @input="fetchQuotes(paginationData.current_page)"
+        @input="fetchQuotes({ currentPage: paginationData.current_page })"
       ></b-pagination>
     </div>
+
     <div v-if="!(quotes && quotes.length)">
       <p class="empty-state">No quotes found</p>
     </div>
@@ -37,6 +38,9 @@
 import QuoteCard from '@/components/QuoteCard.vue'
 
 export default {
+  props: {
+    url: String
+  },
   components: {
     QuoteCard
   },
@@ -50,8 +54,10 @@ export default {
     setTitle: function(quote) {
       return quote.is_qotd ? 'QUOTE OF THE DAY' : ''
     },
-    fetchQuotes: function(currentPage) {
-      this.$store.dispatch('fetchQuotes', { currentPage })
+    fetchQuotes: function(params) {
+      let urlParams = { url: this.url }
+      let mergedParams = { ...params, ...urlParams }
+      this.$store.dispatch('fetchQuotes', mergedParams)
     }
   },
   computed: {
@@ -79,7 +85,7 @@ export default {
     // }
   },
   mounted() {
-    this.$store.dispatch('fetchQuotes', {
+    this.fetchQuotes({
       currentPage: 1,
       tags: this.selectedTopic || ''
     })

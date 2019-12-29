@@ -61,7 +61,7 @@ export default {
         // TO-DO: handle login errors
         let parsedData = JSON.parse(data)
         this.$bvToast.toast(parsedData.message, {
-          autoHideDelay: 2000,
+          autoHideDelay: 1000,
           variant: 'success',
           noCloseButton: true
         })

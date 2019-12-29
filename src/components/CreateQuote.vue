@@ -19,7 +19,7 @@
 
         <b-form-group
           id="quote-author-group"
-          label="Author:"
+          label="Author(required):"
           label-for="quote-author"
           description="credit the source of this quote"
           align="left"
@@ -79,7 +79,7 @@
 
         <b-form-group
           id="quote-content-group"
-          label="Body:"
+          label="Body(required):"
           label-for="quote-body"
           align="left"
         >
@@ -88,7 +88,7 @@
             v-model="form.content"
             required
             placeholder="lorem ipsum"
-            :style="{ height: '11em' }"
+            :style="{ height: '10em' }"
           ></b-form-textarea>
         </b-form-group>
         <b-button block type="submit" variant="outline-dark">Save</b-button>

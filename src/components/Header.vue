@@ -20,7 +20,7 @@
               class="my-2 my-sm-0 create-quote-button"
               >Add a Quote</b-button
             >
-            <b-modal id="modal-2" title="Add a Quote">
+            <b-modal id="modal-2" title="Add a Quote" :hide-footer="true">
               <CreateQuote />
             </b-modal>
           </b-nav-item>
@@ -30,7 +30,7 @@
             <template v-slot:button-content>
               <em>{{ currentUser.name }}</em>
             </template>
-            <b-dropdown-item href="#">Profile</b-dropdown-item>
+            <b-dropdown-item href="/profile">Profile</b-dropdown-item>
             <b-dropdown-item href="#" @click.prevent="logout"
               >Sign Out</b-dropdown-item
             >
@@ -40,7 +40,7 @@
           <b-button v-b-modal.modal-1 class="my-2 my-sm-0 signin-button"
             >Sign in</b-button
           >
-          <b-modal id="modal-1" title="Signin to illume">
+          <b-modal id="modal-1" title="Signin to illume" :hide-footer="true">
             <div class="signin-modal">
               <p>
                 Sign in to get access to premium quotes, create your own quotes,
@@ -74,10 +74,11 @@ export default {
       this.$store.commit('handleLogout')
       // this.$router.push('/')
       this.$bvToast.toast('Signed out successfully', {
-        autoHideDelay: 2000,
+        autoHideDelay: 1000,
         variant: 'success',
         noCloseButton: true
       })
+      this.$router.push('/')
     }
   },
   components: {
