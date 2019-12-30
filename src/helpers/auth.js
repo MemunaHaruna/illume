@@ -20,20 +20,20 @@ export const setAxiosAuthorizationHeader = token => {
   }
 }
 
-export const verifyUserExists = commit => {
+export const verifyUserExists = async commit => {
   const token = window.localStorage.getItem('IllumeJwtToken')
   if (token) {
     setAxiosAuthorizationHeader(token)
-    const user_id = jwt_decode(token).user_id
-    axios
-      .get(`${process.env.VUE_APP_API_BASE_URL}api/users/${user_id}`)
-      .then(response => {
-        commit('setCurrentUser', response.data)
-      })
-      .catch(error => {
-        window.localStorage.removeItem('IllumeJwtToken')
-        commit('setCurrentUser', null)
-        console.log(error)
-      })
+    try {
+      const user_id = jwt_decode(token).user_id
+      let response = await axios.get(
+        `${process.env.VUE_APP_API_BASE_URL}api/users/${user_id}`
+      )
+      commit('setCurrentUser', response.data)
+    } catch (error) {
+      removeTokenFromLocalStorage()
+      commit('setCurrentUser', null)
+      console.log(error)
+    }
   }
 }

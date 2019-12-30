@@ -55,7 +55,10 @@ export default {
       return quote.is_qotd ? 'QUOTE OF THE DAY' : ''
     },
     fetchQuotes: function(params) {
-      let urlParams = { url: this.url }
+      let urlParams = {}
+      if (this.url) {
+        urlParams = { url: this.url }
+      }
       let mergedParams = { ...params, ...urlParams }
       this.$store.dispatch('fetchQuotes', mergedParams)
     }

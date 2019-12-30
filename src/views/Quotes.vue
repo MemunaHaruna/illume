@@ -16,14 +16,9 @@ export default {
     QuotesList,
     TopicsList
   },
-  computed: {
-    currentUser() {
-      return this.$store.getters['currentUser']
-    }
-  },
   data() {
     return {
-      url: this.currentUser && this.currentUser.id ? 'api/quotes' : 'api'
+      url: 'api/quotes'
     }
   }
 }

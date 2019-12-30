@@ -5,11 +5,12 @@
       class="my-2 my-sm-0 social-login__button"
       @click="handleLogin('twitter')"
     >
-      <span
-        ><font-awesome-icon
+      <span>
+        <font-awesome-icon
           :icon="{ prefix: 'fab', iconName: 'twitter' }"
           :style="{ color: '#55acee' }"
-      /></span>
+        />
+      </span>
       <span>Sign in with Twitter</span>
     </b-button>
 
@@ -18,11 +19,12 @@
       class="my-2 my-sm-0 social-login__button"
       @click="handleLogin('google_oauth2')"
     >
-      <span left
-        ><font-awesome-icon
+      <span left>
+        <font-awesome-icon
           :icon="{ prefix: 'fab', iconName: 'google' }"
           :style="{ color: '#dd4b39' }"
-      /></span>
+        />
+      </span>
       Sign in with Google
     </b-button>
     <b-button
@@ -30,11 +32,12 @@
       class="my-2 my-sm-0 social-login__button"
       @click="handleLogin('facebook')"
     >
-      <span left
-        ><font-awesome-icon
+      <span left>
+        <font-awesome-icon
           :icon="{ prefix: 'fab', iconName: 'facebook' }"
           :style="{ color: '#3b5998' }"
-      /></span>
+        />
+      </span>
       Sign in with Facebook
     </b-button>
   </div>
@@ -60,13 +63,23 @@ export default {
       received(data) {
         // TO-DO: handle login errors
         let parsedData = JSON.parse(data)
-        this.$bvToast.toast('Signed in successfully', {
-          autoHideDelay: 1000,
-          variant: 'success',
-          noCloseButton: true
-        })
         this.popup.close()
-        this.$store.commit('setCurrentUser', parsedData)
+        if (parsedData.user) {
+          this.$bvToast.toast('Signed in successfully', {
+            autoHideDelay: 1000,
+            variant: 'success',
+            noCloseButton: true
+          })
+          this.$store.commit('setCurrentUser', parsedData)
+          this.$router.push('/quotes')
+        } else {
+          this.$bvToast.toast('Error logging in. Please try again', {
+            autoHideDelay: 1000,
+            variant: 'danger',
+            noCloseButton: true
+          })
+          this.$store.commit('setCurrentUser', null)
+        }
       },
       disconnected() {
         console.log('socket connection disconnected')

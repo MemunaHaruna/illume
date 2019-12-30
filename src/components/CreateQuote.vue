@@ -73,8 +73,7 @@
             :options="topics"
             :multiple="true"
             :close-on-select="false"
-          >
-          </multiselect>
+          ></multiselect>
         </b-form-group>
 
         <b-form-group
@@ -170,6 +169,9 @@ export default {
       }
       return []
     }
+  },
+  mounted() {
+    this.$store.dispatch('fetchTopics')
   }
 }
 </script>

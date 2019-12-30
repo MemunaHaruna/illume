@@ -44,7 +44,7 @@
             <div class="signin-modal">
               <p>
                 Sign in to get access to premium quotes, create your own quotes,
-                bookmark and share your favourite quotes.
+                bookmark and share your favourite quotes with your friends.
               </p>
               <SocialAuth />
             </div>
@@ -71,7 +71,7 @@ export default {
   },
   methods: {
     logout: function() {
-      this.$store.commit('handleLogout')
+      this.$store.dispatch('handleLogout')
       this.$bvToast.toast('Signed out successfully', {
         autoHideDelay: 1000,
         variant: 'success',

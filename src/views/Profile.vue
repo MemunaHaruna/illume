@@ -20,7 +20,9 @@
         <b-tab title="Bookmarked Quotes">
           <Bookmarks :currentUserId="currentUser.id" />
         </b-tab>
-        <b-tab title="Notifications"><h5>Notifications</h5></b-tab>
+        <b-tab title="Notifications">
+          <h5>Notifications</h5>
+        </b-tab>
       </b-tabs>
     </div>
   </div>
