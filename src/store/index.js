@@ -21,7 +21,8 @@ export default new Vuex.Store({
     newBookmark: {},
     createBookmarkError: '',
     deleteBookmarkSuccessMessage: '',
-    deleteBookmarkError: ''
+    deleteBookmarkError: '',
+    deleteQuoteError: ''
   },
   mutations: {
     setCurrentUser(state, payload) {
@@ -66,6 +67,9 @@ export default new Vuex.Store({
     },
     deleteBookmarkError(state, payload) {
       state.deleteBookmarkError = payload.error
+    },
+    deleteQuoteError(state, payload) {
+      state.deleteQuoteError = payload.error
     }
   },
   getters: {
@@ -104,6 +108,9 @@ export default new Vuex.Store({
     },
     deleteBookmarkError: state => {
       return state.deleteBookmarkError
+    },
+    deleteQuoteError: state => {
+      return state.deleteQuoteError
     }
   },
   actions: {
@@ -176,7 +183,7 @@ export default new Vuex.Store({
           handleErrors(error)
           payload.vm.$bvToast.toast('Error while creating a quote', {
             autoHideDelay: 1000,
-            variant: 'success',
+            variant: 'danger',
             noCloseButton: true
           })
         })
@@ -223,6 +230,61 @@ export default new Vuex.Store({
           commit('deleteBookmarkError', error)
           handleErrors(error)
           payload.vm.$bvToast.toast('Error deleting bookmark', {
+            autoHideDelay: 1000,
+            variant: 'danger',
+            noCloseButton: true
+          })
+        })
+    },
+    editQuote({ commit, dispatch }, payload) {
+      let formData = payload.formData
+      if (formData.tag_ids.length > 0) {
+        let tempTags = []
+        formData.tag_ids.forEach(item => {
+          tempTags.push(item.id)
+        })
+        formData.tag_ids = tempTags
+      }
+      if (formData.access) {
+        formData.access = Number(formData.access)
+      }
+
+      Vue.prototype.$http
+        .put(`api/quotes/${payload.quote_id}`, formData)
+        .then(response => {
+          commit('setNewQuote', response.data)
+          dispatch('fetchQuotes')
+          payload.vm.$bvToast.toast('Successfully edited quote', {
+            autoHideDelay: 1000,
+            variant: 'success',
+            noCloseButton: true
+          })
+        })
+        .catch(error => {
+          commit('createQuoteError', error)
+          handleErrors(error)
+          payload.vm.$bvToast.toast('Error while editing quote', {
+            autoHideDelay: 1000,
+            variant: 'danger',
+            noCloseButton: true
+          })
+        })
+    },
+    deleteQuote({ commit, dispatch }, payload) {
+      Vue.prototype.$http
+        .delete(payload.url)
+        .then(() => {
+          dispatch('fetchQuotes')
+          payload.vm.$bvToast.toast('Successfully deleted quote', {
+            autoHideDelay: 1000,
+            variant: 'success',
+            noCloseButton: true
+          })
+        })
+        .catch(error => {
+          commit('deleteQuoteError', error)
+          handleErrors(error)
+          payload.vm.$bvToast.toast('Error while deleting quote', {
             autoHideDelay: 1000,
             variant: 'danger',
             noCloseButton: true
