@@ -1,11 +1,10 @@
 <template>
-  <div>
+  <div v-if="currentUser">
     <header class="header-section">
-      <div class="header-avatar">
+      <div class="header-avatar" v-if="currentUser.avatar_url">
         <img
           :src="currentUser.avatar_url"
           alt="user avatar"
-          v-if="currentUser.avatar_url"
           width="100"
           height="100"
         />

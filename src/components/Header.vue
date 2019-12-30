@@ -72,13 +72,14 @@ export default {
   methods: {
     logout: function() {
       this.$store.commit('handleLogout')
-      // this.$router.push('/')
       this.$bvToast.toast('Signed out successfully', {
         autoHideDelay: 1000,
         variant: 'success',
         noCloseButton: true
       })
-      this.$router.push('/')
+      if (this.$router.currentRoute.name != 'home') {
+        this.$router.push('/')
+      }
     }
   },
   components: {

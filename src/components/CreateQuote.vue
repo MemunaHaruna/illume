@@ -104,16 +104,19 @@ export default {
   components: {
     Multiselect
   },
+  props: {
+    quote: Object
+  },
   data() {
     return {
       form: {
-        source_title: '',
-        author: '',
-        content: '',
-        source_type: '',
-        link_to_source: '',
-        access: [],
-        tag_ids: []
+        source_title: this.getQuoteDetails('source_title'),
+        author: this.getQuoteDetails('author'),
+        content: this.getQuoteDetails('content'),
+        source_type: this.getQuoteDetails('source_type'),
+        link_to_source: this.getQuoteDetails('link_to_source'),
+        access: this.getQuoteDetails('access'),
+        tag_ids: this.getQuoteTags()
       }
     }
   },
@@ -130,7 +133,18 @@ export default {
   },
   methods: {
     onSubmit() {
-      this.$store.dispatch('createNewQuote', this.form)
+      if (this.quote) {
+        this.$store.dispatch('editQuote', {
+          formData: this.form,
+          quote_id: this.quote.id,
+          vm: this
+        })
+      } else {
+        this.$store.dispatch('createNewQuote', {
+          formData: this.form,
+          vm: this
+        })
+      }
       this.form = {
         source_title: '',
         author: '',
@@ -140,6 +154,21 @@ export default {
         access: [],
         tag_ids: []
       }
+    },
+    getQuoteDetails: function(detail) {
+      if (this.quote && this.quote[detail] && detail == 'access') {
+        return this.quote[detail] == 'open' ? 0 : 1
+      }
+      if (this.quote && this.quote[detail]) {
+        return this.quote[detail]
+      }
+      return ''
+    },
+    getQuoteTags: function() {
+      if (this.quote && this.quote.tags) {
+        return this.quote.tags
+      }
+      return []
     }
   }
 }

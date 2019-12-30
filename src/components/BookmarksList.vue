@@ -7,6 +7,7 @@
             :quote="bookmark.quote"
             :imageUrl="setImageUrl(bookmark.quote)"
             :title="setTitle(bookmark.quote)"
+            :bookmark="bookmark"
           />
         </div>
       </div>
