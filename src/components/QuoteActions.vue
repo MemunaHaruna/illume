@@ -3,7 +3,7 @@
     <font-awesome-icon
       v-if="canEditOrDelete()"
       :icon="{ prefix: 'far', iconName: 'edit' }"
-      :style="{}"
+      :style="{ color: '#808080' }"
       class="action-icons"
       title="Edit Quote"
       @click="showModal('edit-quote-modal')"
@@ -14,7 +14,7 @@
     <font-awesome-icon
       v-if="canEditOrDelete()"
       :icon="{ prefix: 'far', iconName: 'trash-alt' }"
-      :style="{}"
+      :style="{ color: '#808080' }"
       class="action-icons"
       title="Delete Quote"
       @click="showModal('delete-quote-modal')"
@@ -27,7 +27,7 @@
     <font-awesome-icon
       v-if="!bookmark"
       :icon="{ prefix: 'far', iconName: 'bookmark' }"
-      :style="{ color: '' }"
+      :style="{ color: '#808080' }"
       class="action-icons"
       title="Add to Bookmarks"
       @click="addToBookmarks"
@@ -36,7 +36,7 @@
       v-if="bookmark"
       :icon="{ prefix: 'fas', iconName: 'bookmark' }"
       :style="{ color: 'red' }"
-      class="action-icons"
+      class="action-icons delete-icon"
       title="Delete from Bookmarks"
       @click="deleteBookmark"
     />
@@ -110,8 +110,7 @@ export default {
   font-size: 1.2em;
   margin: 0 1.5em;
 }
-
-svg path {
-  fill: #808080;
+.delete-icon {
+  fill: red !important;
 }
 </style>
