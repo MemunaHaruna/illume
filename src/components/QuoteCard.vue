@@ -20,7 +20,9 @@
     </b-card-text>
     <b-card-text class="quote-author">{{ quote.author }}</b-card-text>
     <template v-slot:footer>
-      <QuoteActions :quote="quote" :bookmark="bookmark" />
+      <div v-if="currentUser">
+        <QuoteActions :quote="quote" :bookmark="bookmark" />
+      </div>
     </template>
   </b-card>
 </template>
@@ -36,6 +38,11 @@ export default {
     imageUrl: String,
     title: String,
     bookmark: Object
+  },
+  computed: {
+    currentUser() {
+      return this.$store.getters['currentUser']
+    }
   }
 }
 </script>

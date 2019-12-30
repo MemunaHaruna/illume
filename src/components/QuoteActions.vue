@@ -90,6 +90,7 @@ export default {
       if (
         this.quote &&
         this.quote.user &&
+        this.currentUser &&
         this.quote.user.id === this.currentUser.id
       ) {
         return true
