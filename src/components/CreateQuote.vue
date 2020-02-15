@@ -86,7 +86,7 @@
             id="quote-body"
             v-model="form.content"
             required
-            placeholder="lorem ipsum"
+            placeholder="I love you without knowing how, or when, or from where. I love you simply, without problems or pride..."
             :style="{ height: '10em' }"
           ></b-form-textarea>
         </b-form-group>
