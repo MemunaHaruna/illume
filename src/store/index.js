@@ -22,7 +22,8 @@ export default new Vuex.Store({
     createBookmarkError: '',
     deleteBookmarkSuccessMessage: '',
     deleteBookmarkError: '',
-    deleteQuoteError: ''
+    deleteQuoteError: '',
+    loading: true
   },
   mutations: {
     setCurrentUser(state, payload) {
@@ -72,6 +73,9 @@ export default new Vuex.Store({
     },
     deleteQuoteError(state, payload) {
       state.deleteQuoteError = payload.error
+    },
+    loading(state, status) {
+      state.loading = status
     }
   },
   getters: {
@@ -113,6 +117,9 @@ export default new Vuex.Store({
     },
     deleteQuoteError: state => {
       return state.deleteQuoteError
+    },
+    loading: state => {
+      return state.loading
     }
   },
   actions: {
@@ -130,29 +137,35 @@ export default new Vuex.Store({
 
       let url = `${payload.url || defaultUrl}/?page=${payload.currentPage ||
         1}&tags=${payload.tags || ''}&q=${payload.query || ''}`
+      commit('loading', true)
       Vue.prototype.$http
         .get(url)
         .then(response => {
           commit('setQuotes', response.data.quotes)
           commit('setPaginationData', response.data.meta.pagination)
+          commit('loading', false)
         })
         .catch(error => {
           console.log(error, 'error fetching quotes')
           handleErrors(error)
+          commit('loading', false)
         })
     },
     fetchBookmarks({ commit }, payload = {}) {
       commit('setSelectedTopicId', payload.tags || '')
       let url = `${payload.url}/?page=${payload.currentPage || 1}`
+      commit('loading', true)
       Vue.prototype.$http
         .get(url)
         .then(response => {
           commit('setBookmarks', response.data.bookmarks)
           commit('setPaginationData', response.data.meta.pagination)
+          commit('loading', false)
         })
         .catch(error => {
           console.log(error, 'error fetching bookmarks')
           handleErrors(error)
+          commit('loading', false)
         })
     },
     fetchTopics({ commit }) {
@@ -184,7 +197,7 @@ export default new Vuex.Store({
       if (formData.access) {
         formData.access = Number(formData.access)
       }
-
+      // commit('loading', true)
       Vue.prototype.$http
         .post('api/quotes', formData)
         .then(response => {
@@ -205,8 +218,10 @@ export default new Vuex.Store({
             noCloseButton: true
           })
         })
+      // commit('loading', false)
     },
     createBookmark({ commit, state, dispatch }, payload = {}) {
+      // commit('loading', true)
       Vue.prototype.$http
         .post(payload.url, { quote_id: payload.quote_id })
         .then(response => {
@@ -229,8 +244,10 @@ export default new Vuex.Store({
             noCloseButton: true
           })
         })
+      // commit('loading', true)
     },
     deleteBookmark({ commit, state, dispatch }, payload) {
+      commit('loading', true)
       Vue.prototype.$http
         .delete(payload.url)
         .then(response => {
@@ -253,6 +270,7 @@ export default new Vuex.Store({
             noCloseButton: true
           })
         })
+      commit('loading', false)
     },
     editQuote({ commit, state, dispatch }, payload) {
       let defaultUrl =
@@ -272,7 +290,7 @@ export default new Vuex.Store({
       if (formData.access) {
         formData.access = Number(formData.access)
       }
-
+      // commit('loading', true)
       Vue.prototype.$http
         .put(`api/quotes/${payload.quote_id}`, formData)
         .then(response => {
@@ -293,6 +311,7 @@ export default new Vuex.Store({
             noCloseButton: true
           })
         })
+      // commit('loading', false)
     },
     deleteQuote({ commit, state, dispatch }, payload) {
       let defaultUrl =
@@ -301,6 +320,7 @@ export default new Vuex.Store({
         payload.vm.$route.name == 'profile'
           ? 'api/quotes/personal_quotes'
           : defaultUrl
+      // commit('loading', true)
       Vue.prototype.$http
         .delete(payload.url)
         .then(() => {
@@ -320,6 +340,7 @@ export default new Vuex.Store({
             noCloseButton: true
           })
         })
+      // commit('loading', true)
     }
   },
   modules: {}

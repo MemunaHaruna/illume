@@ -2,6 +2,9 @@
   <div id="app">
     <div id="nav">
       <app-header></app-header>
+      <div :class="{ spinner: loading() }">
+        <pulse-loader :loading="loading()"></pulse-loader>
+      </div>
       <!-- <router-link to="/">Home</router-link> | -->
       <!-- <router-link to="/about">About</router-link> -->
     </div>
@@ -12,10 +15,17 @@
 <script>
 // @ is an alias to /src
 import Header from '@/components/Header.vue'
+import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
 
 export default {
   components: {
-    'app-header': Header
+    'app-header': Header,
+    'pulse-loader': PulseLoader
+  },
+  methods: {
+    loading() {
+      return this.$store.getters['loading']
+    }
   }
 }
 </script>
@@ -39,5 +49,8 @@ export default {
       color: #e27a4d;
     }
   }
+}
+.spinner {
+  margin: 3em 0;
 }
 </style>
