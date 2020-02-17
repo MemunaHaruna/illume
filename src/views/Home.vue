@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+    <b-button variant="light" class="add-to-home">Add to Home Screen</b-button>
     <TopicsList />
     <QuotesList :url="url" />
   </div>
@@ -28,3 +29,10 @@ export default {
   }
 }
 </script>
+
+<style>
+.add-to-home {
+  display: none;
+  margin: 0 auto;
+}
+</style>
