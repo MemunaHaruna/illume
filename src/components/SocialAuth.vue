@@ -27,7 +27,7 @@
       </span>
       Sign in with Google
     </b-button>
-    <b-button
+    <!-- <b-button
       id="facebook-login-button"
       class="my-2 my-sm-0 social-login__button"
       @click="handleLogin('facebook')"
@@ -39,7 +39,7 @@
         />
       </span>
       Sign in with Facebook
-    </b-button>
+    </b-button> -->
   </div>
 </template>
 
@@ -47,7 +47,11 @@
 export default {
   data() {
     return {
-      socketId: window.localStorage.getItem('socketId'),
+      socketId:
+        new Date().getTime() +
+        Math.random()
+          .toString(20)
+          .substr(2, 10),
       popup: '',
       provider: ''
     }
@@ -103,12 +107,6 @@ export default {
         height=${height}, top=${top}, left=${left}`
       )
     }
-  },
-  created() {
-    window.localStorage.setItem(
-      'socketId',
-      parseInt(Math.random() * 1000000000, 10)
-    )
   },
   mounted() {
     this.$cable.subscribe({

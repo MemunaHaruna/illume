@@ -20,9 +20,7 @@
     </b-card-text>
     <b-card-text class="quote-author">{{ quote.author }}</b-card-text>
     <template v-slot:footer>
-      <div v-if="currentUser">
-        <QuoteActions :quote="quote" :bookmark="bookmark" />
-      </div>
+      <QuoteActions :quote="quote" :bookmark="bookmark" />
     </template>
   </b-card>
 </template>

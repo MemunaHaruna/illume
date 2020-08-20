@@ -31,14 +31,19 @@ export default {
     }
   },
   methods: {
+    setTopicButtonState: function(status) {
+      return (this.isActive = status)
+    },
     filterQuotesByTopic: function(event) {
       let selectedTopicId = event.target.id
       if (this.selectedTopicId && this.selectedTopicId == selectedTopicId) {
-        this.isActive = false
-        this.$store.dispatch('fetchQuotes')
+        this.setTopicButtonState(false)
+        this.$store.commit('setSelectedTopicId', '')
+        this.$store.dispatch('fetchQuotes', { vm: this })
       } else {
-        this.isActive = true
-        this.$store.dispatch('fetchQuotes', { tags: selectedTopicId })
+        this.setTopicButtonState(true)
+        this.$store.commit('setSelectedTopicId', selectedTopicId)
+        this.$store.dispatch('fetchQuotes', { vm: this })
       }
     }
   },

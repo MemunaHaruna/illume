@@ -1,7 +1,7 @@
 <template>
   <div>
     <h5>Bookmarks</h5>
-    <BookmarksList :url="url" />
+    <BookmarksList />
   </div>
 </template>
 
@@ -14,11 +14,6 @@ export default {
   },
   props: {
     currentUserId: Number
-  },
-  data() {
-    return {
-      url: `api/users/${this.currentUserId}/bookmarks`
-    }
   }
 }
 </script>

@@ -153,6 +153,9 @@ export default {
         access: [],
         tag_ids: []
       }
+
+      this.$bvModal.hide('create-quote-modal')
+      this.$bvModal.hide('edit-quote-modal')
     },
     getQuoteDetails: function(detail) {
       if (this.quote && this.quote[detail] && detail == 'access') {

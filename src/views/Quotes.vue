@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <TopicsList />
-    <QuotesList :url="url" />
+    <QuotesList />
   </div>
 </template>
 
@@ -15,11 +15,6 @@ export default {
   components: {
     QuotesList,
     TopicsList
-  },
-  data() {
-    return {
-      url: 'api/quotes'
-    }
   }
 }
 </script>

@@ -35,9 +35,6 @@
 import QuoteCard from '@/components/QuoteCard.vue'
 
 export default {
-  props: {
-    url: String
-  },
   components: {
     QuoteCard
   },
@@ -52,8 +49,8 @@ export default {
       return quote.is_qotd ? 'QUOTE OF THE DAY' : ''
     },
     fetchBookmarks: function(params) {
-      let urlParams = { url: this.url }
-      let mergedParams = { ...params, ...urlParams }
+      const vmParams = { vm: this }
+      const mergedParams = { ...params, ...vmParams }
       this.$store.dispatch('fetchBookmarks', mergedParams)
     }
   },
@@ -63,15 +60,12 @@ export default {
     },
     paginationData() {
       return this.$store.getters['paginationData']
-    },
-    selectedTopic() {
-      return this.$store.getters['selectedTopic']
     }
   },
   mounted() {
     this.fetchBookmarks({
       currentPage: 1,
-      tags: this.selectedTopic || ''
+      vm: this
     })
   }
 }
@@ -80,5 +74,9 @@ export default {
 <style>
 .bookmarks-container {
   margin-top: 2em;
+}
+
+svg.action-icons.delete-icon.svg-inline--fa.fa-bookmark.fa-w-12 {
+  color: #e27a4d !important;
 }
 </style>
