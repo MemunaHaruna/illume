@@ -23,7 +23,8 @@ export default new Vuex.Store({
     deleteBookmarkSuccessMessage: '',
     deleteBookmarkError: '',
     deleteQuoteError: '',
-    loading: true
+    loading: true,
+    queryString: ''
   },
   mutations: {
     setCurrentUser(state, payload) {
@@ -76,6 +77,9 @@ export default new Vuex.Store({
     },
     loading(state, status) {
       state.loading = status
+    },
+    setQueryString(state, text) {
+      state.queryString = text
     }
   },
   getters: {
@@ -120,23 +124,31 @@ export default new Vuex.Store({
     },
     loading: state => {
       return state.loading
+    },
+    queryString: state => {
+      return state.queryString
     }
   },
   actions: {
-    handleLogout({ commit, state, dispatch }) {
+    handleLogout({ commit, state, dispatch }, payload) {
       state.currentUser = null
       state.quotes = []
       Vue.prototype.$http.defaults.headers.common['Authorization'] = null
       commit('handleLogout')
-      dispatch('fetchQuotes', { url: 'api' })
+      dispatch('fetchQuotes', { vm: payload.vm })
     },
     fetchQuotes({ commit, state }, payload = {}) {
-      commit('setSelectedTopicId', payload.tags || '')
       let defaultUrl =
         state.currentUser && state.currentUser.id ? 'api/quotes' : 'api'
 
-      let url = `${payload.url || defaultUrl}/?page=${payload.currentPage ||
-        1}&tags=${payload.tags || ''}&q=${payload.query || ''}`
+      let quotesUrl =
+        payload.vm.$route.name == 'profile'
+          ? 'api/quotes/personal_quotes'
+          : defaultUrl
+
+      let url = `${quotesUrl}/?page=${payload.currentPage ||
+        1}&tags=${state.selectedTopicId || ''}&q=${state.queryString || ''}`
+
       commit('loading', true)
       Vue.prototype.$http
         .get(url)
@@ -151,9 +163,10 @@ export default new Vuex.Store({
           commit('loading', false)
         })
     },
-    fetchBookmarks({ commit }, payload = {}) {
-      commit('setSelectedTopicId', payload.tags || '')
-      let url = `${payload.url}/?page=${payload.currentPage || 1}`
+    fetchBookmarks({ commit, state }, payload = {}) {
+      let url = `api/users/${
+        state.currentUser.id
+      }/bookmarks/?page=${payload.currentPage || 1}`
       commit('loading', true)
       Vue.prototype.$http
         .get(url)
@@ -179,13 +192,7 @@ export default new Vuex.Store({
           handleErrors(error)
         })
     },
-    createNewQuote({ commit, state, dispatch }, payload) {
-      let defaultUrl =
-        state.currentUser && state.currentUser.id ? 'api/quotes' : 'api'
-      let quotesUrl =
-        payload.vm.$route.name == 'profile'
-          ? 'api/quotes/personal_quotes'
-          : defaultUrl
+    createNewQuote({ commit, dispatch }, payload) {
       let formData = payload.formData
       if (formData.tag_ids.length > 0) {
         let tempTags = []
@@ -202,7 +209,7 @@ export default new Vuex.Store({
         .post('api/quotes', formData)
         .then(response => {
           commit('setNewQuote', response.data)
-          dispatch('fetchQuotes', { url: quotesUrl })
+          dispatch('fetchQuotes', { vm: payload.vm })
           payload.vm.$bvToast.toast('Successfully added new quote', {
             autoHideDelay: 1000,
             variant: 'success',
@@ -222,13 +229,21 @@ export default new Vuex.Store({
     },
     createBookmark({ commit, state, dispatch }, payload = {}) {
       // commit('loading', true)
+      if (payload.quote.bookmarked_by_current_user) {
+        payload.vm.$bvToast.toast('Already added quote to bookmarks', {
+          autoHideDelay: 1000,
+          variant: 'success',
+          noCloseButton: true
+        })
+        return
+      }
+      let url = `api/users/${state.currentUser.id}/bookmarks`
       Vue.prototype.$http
-        .post(payload.url, { quote_id: payload.quote_id })
+        .post(url, { quote_id: payload.quote.id })
         .then(response => {
           commit('setNewBookmark', response.data)
-          dispatch('fetchBookmarks', {
-            url: `api/users/${state.currentUser.id}/bookmarks`
-          })
+          dispatch('fetchBookmarks')
+          dispatch('fetchQuotes', { vm: payload.vm })
           payload.vm.$bvToast.toast('Successfully added new bookmark', {
             autoHideDelay: 1000,
             variant: 'success',
@@ -244,17 +259,16 @@ export default new Vuex.Store({
             noCloseButton: true
           })
         })
-      // commit('loading', true)
     },
     deleteBookmark({ commit, state, dispatch }, payload) {
       commit('loading', true)
+      const url = `api/users/${state.currentUser.id}/bookmarks/${payload.bookmark.id}`
       Vue.prototype.$http
-        .delete(payload.url)
+        .delete(url)
         .then(response => {
           commit('deleteBookmarkSuccess', response.data)
-          dispatch('fetchBookmarks', {
-            url: `api/users/${state.currentUser.id}/bookmarks`
-          })
+          dispatch('fetchBookmarks')
+          dispatch('fetchQuotes', { vm: payload.vm })
           payload.vm.$bvToast.toast('Successfully deleted bookmark', {
             autoHideDelay: 1000,
             variant: 'success',
@@ -272,13 +286,7 @@ export default new Vuex.Store({
         })
       commit('loading', false)
     },
-    editQuote({ commit, state, dispatch }, payload) {
-      let defaultUrl =
-        state.currentUser && state.currentUser.id ? 'api/quotes' : 'api'
-      let quotesUrl =
-        payload.vm.$route.name == 'profile'
-          ? 'api/quotes/personal_quotes'
-          : defaultUrl
+    editQuote({ commit, dispatch }, payload) {
       let formData = payload.formData
       if (formData.tag_ids.length > 0) {
         let tempTags = []
@@ -295,7 +303,7 @@ export default new Vuex.Store({
         .put(`api/quotes/${payload.quote_id}`, formData)
         .then(response => {
           commit('setNewQuote', response.data)
-          dispatch('fetchQuotes', { url: quotesUrl })
+          dispatch('fetchQuotes', { vm: payload.vm })
           payload.vm.$bvToast.toast('Successfully edited quote', {
             autoHideDelay: 1000,
             variant: 'success',
@@ -313,18 +321,13 @@ export default new Vuex.Store({
         })
       // commit('loading', false)
     },
-    deleteQuote({ commit, state, dispatch }, payload) {
-      let defaultUrl =
-        state.currentUser && state.currentUser.id ? 'api/quotes' : 'api'
-      let quotesUrl =
-        payload.vm.$route.name == 'profile'
-          ? 'api/quotes/personal_quotes'
-          : defaultUrl
+    deleteQuote({ commit, dispatch }, payload) {
       // commit('loading', true)
+      const url = `api/quotes/${payload.quote.id}`
       Vue.prototype.$http
-        .delete(payload.url)
+        .delete(url)
         .then(() => {
-          dispatch('fetchQuotes', { url: quotesUrl })
+          dispatch('fetchQuotes', { vm: payload.vm })
           payload.vm.$bvToast.toast('Successfully deleted quote', {
             autoHideDelay: 1000,
             variant: 'success',

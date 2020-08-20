@@ -21,19 +21,15 @@ export default {
     return {
       query: '',
       timeout: null,
-      waitTime: 1000
+      waitTime: 300
     }
   },
   methods: {
     handleSearch: function() {
-      if (this.query == '') {
-        this.$store.dispatch('fetchQuotes')
-      }
       clearTimeout(this.timeout)
       this.timeout = setTimeout(() => {
-        this.$store.dispatch('fetchQuotes', {
-          query: this.query
-        })
+        this.$store.commit('setQueryString', this.query)
+        this.$store.dispatch('fetchQuotes', { vm: this })
       }, this.waitTime)
     }
   }

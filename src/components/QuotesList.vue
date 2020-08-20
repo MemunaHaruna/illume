@@ -38,9 +38,6 @@
 import QuoteCard from '@/components/QuoteCard.vue'
 
 export default {
-  props: {
-    url: String
-  },
   components: {
     QuoteCard
   },
@@ -55,11 +52,8 @@ export default {
       return quote.is_qotd ? 'QUOTE OF THE DAY' : ''
     },
     fetchQuotes: function(params) {
-      let urlParams = {}
-      if (this.url) {
-        urlParams = { url: this.url }
-      }
-      let mergedParams = { ...params, ...urlParams }
+      const vmParams = { vm: this }
+      const mergedParams = { ...params, ...vmParams }
       this.$store.dispatch('fetchQuotes', mergedParams)
     }
   },
@@ -69,28 +63,12 @@ export default {
     },
     paginationData() {
       return this.$store.getters['paginationData']
-    },
-    selectedTopic() {
-      return this.$store.getters['selectedTopic']
     }
-    // cardRows() {
-    //   var rows = []
-    //   var itemsPerRow = 3
-    //   var arr = this.quotes
-    //   for (var i = 0; i < arr.length; i += itemsPerRow) {
-    //     var row = []
-    //     for (var z = 0; z < itemsPerRow; z++) {
-    //       row.push(arr[i + z])
-    //     }
-    //     rows.push(row)
-    //   }
-    //   return rows
-    // }
   },
   mounted() {
     this.fetchQuotes({
       currentPage: 1,
-      tags: this.selectedTopic || ''
+      vm: this
     })
   }
 }

@@ -1,8 +1,8 @@
 <template>
   <div class="home">
-    <b-button variant="light" class="add-to-home">Add to Home Screen</b-button>
+    <!-- <b-button variant="light" class="add-to-home">Add to Home Screen</b-button> -->
     <TopicsList />
-    <QuotesList :url="url" />
+    <QuotesList />
   </div>
 </template>
 
@@ -20,11 +20,6 @@ export default {
   computed: {
     currentUser() {
       return this.$store.getters['currentUser']
-    }
-  },
-  data() {
-    return {
-      url: this.currentUser && this.currentUser.id ? 'api/quotes' : 'api'
     }
   }
 }

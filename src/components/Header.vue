@@ -16,11 +16,15 @@
           <b-nav-item>
             <b-button
               block
-              v-b-modal.modal-2
+              v-b-modal.create-quote-modal
               class="my-2 my-sm-0 create-quote-button"
               >Add a Quote</b-button
             >
-            <b-modal id="modal-2" title="Add a Quote" :hide-footer="true">
+            <b-modal
+              id="create-quote-modal"
+              title="Add a Quote"
+              :hide-footer="true"
+            >
               <CreateQuote />
             </b-modal>
           </b-nav-item>
@@ -30,8 +34,13 @@
             <template v-slot:button-content>
               <em>{{ currentUser.name }}</em>
             </template>
-            <b-dropdown-item href="/profile">Profile</b-dropdown-item>
-            <b-dropdown-item href="#" @click.prevent="logout"
+            <b-dropdown-item href="/profile" class="nav-action-link"
+              >Profile</b-dropdown-item
+            >
+            <b-dropdown-item
+              class="nav-action-link"
+              href="#"
+              @click.prevent="logout"
               >Sign Out</b-dropdown-item
             >
           </b-nav-item-dropdown>
@@ -71,7 +80,7 @@ export default {
   },
   methods: {
     logout: function() {
-      this.$store.dispatch('handleLogout')
+      this.$store.dispatch('handleLogout', { vm: this })
       this.$bvToast.toast('Signed out successfully', {
         autoHideDelay: 1000,
         variant: 'success',
@@ -113,5 +122,8 @@ export default {
   font-size: 0.9em;
   color: rgba(0, 0, 0, 0.54);
   text-align: center !important;
+}
+li .nav-action-link a:focus {
+  background-color: #e27a4d !important;
 }
 </style>
